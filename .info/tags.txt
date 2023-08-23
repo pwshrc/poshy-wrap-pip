@@ -1,0 +1,6 @@
+pip
+pip3
+syspip
+syspip3
+poshy-wrap
+pwshrc
