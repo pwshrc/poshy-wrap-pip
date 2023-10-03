@@ -22,22 +22,58 @@ Set-Alias -Name pip_package_location -Value _pip3_package_location
 Set-Alias -Name syspip3_package_location -Value _syspip3_package_location
 Set-Alias -Name syspip_package_location -Value _syspip3_package_location
 
+Export-ModuleMember -Alias @(
+  "pip3",
+  "syspip3",
+  "pip",
+  "syspip",
+  "pip3_package_location",
+  "pip_package_location",
+  "syspip3_package_location",
+  "syspip_package_location"
+)
 
-Set-Alias -Name pipi -Value "pip install"
-Set-Alias -Name pipu -Value "pip install --upgrade"
-Set-Alias -Name pipun -Value "pip uninstall"
-Set-Alias -Name pipgi -Value "pip freeze | grep"
-Set-Alias -Name piplo -Value "pip list -o"
+function Invoke-PipInstall {
+  pip install @args
+}
+Set-Alias -Name pipi -Value Invoke-PipInstall
+Export-ModuleMember -Function Invoke-PipInstall -Alias pipi
+
+function Invoke-PipInstallUpgrade {
+  pip install --upgrade @args
+}
+Set-Alias -Name pipu -Value Invoke-PipInstallUpgrade
+Export-ModuleMember -Function Invoke-PipInstallUpgrade -Alias pipu
+
+function Invoke-PipUninstall {
+  pip uninstall @args
+}
+Set-Alias -Name pipun -Value Invoke-PipUninstall
+Export-ModuleMember -Function Invoke-PipUninstall -Alias pipun
+
+function Invoke-GrepPipFreeze {
+  pip freeze | grep @args
+}
+Set-Alias -Name pipgi -Value Invoke-GrepPipFreeze
+Export-ModuleMember -Function Invoke-GrepPipFreeze -Alias pipgi
+
+function Invoke-PipListOutdated {
+  pip list -o @args
+}
+Set-Alias -Name piplo -Value Invoke-PipListOutdated
+Export-ModuleMember -Function Invoke-PipListOutdated -Alias piplo
 
 # Create requirements file
 function pipreq {
   pip freeze > requirements.txt
 }
+Export-ModuleMember -Function pipreq
 
 # Install packages from requirements file
 function pipir {
   pip install -r requirements.txt
 }
+Export-ModuleMember -Function pipir
 
 # Upgrade all installed packages
 function pipupall {
@@ -46,6 +82,7 @@ function pipupall {
     pip install --upgrade @packages
   }
 }
+Export-ModuleMember -Function pipupall
 
 # Uninstall all installed packages
 function pipunall {
@@ -54,6 +91,7 @@ function pipunall {
     pip uninstall -y @packages
   }
 }
+Export-ModuleMember -Function pipunall
 
 # Install from GitHub repository
 function pipig {
@@ -65,6 +103,7 @@ function pipig {
   )
   pip install "git+https://github.com/${ownerAndRepo}.git"
 }
+Export-ModuleMember -Function pipig
 
 # Install from GitHub branch
 function pipigb {
@@ -80,6 +119,7 @@ param(
  )
   pip install "git+https://github.com/${ownerAndRepo}.git@${branchish}"
 }
+Export-ModuleMember -Function pipigb
 
 # Install from GitHub pull request
 function pipigp {
@@ -95,6 +135,4 @@ function pipigp {
      )
   pip install "git+https://github.com/${ownerAndRepo}.git@refs/pull/${pullRequestNumber}/head"
 }
-
-
-Export-ModuleMember -Function * -Alias *
+Export-ModuleMember -Function pipigp
